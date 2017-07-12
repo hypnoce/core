@@ -67,6 +67,7 @@ public class SubclassedComponentDescriptorTest {
         final BeanDeploymentArchive bda = new BeanDeploymentArchiveImpl("1",
                 Foo.class,
                 Bar.class,
+                Qux.class,
                 BarLocal.class,
                 BarDecorator.class,
                 BarInterceptor.class,
@@ -136,6 +137,12 @@ public class SubclassedComponentDescriptorTest {
         assertNotNull(model);
         assertTrue(model.hasExternalConstructorInterceptors());
     }
+
+   @Test
+   public void testDefaultMethod() {
+      Qux qux = manager.createInjectionTarget(manager.createAnnotatedType(Qux.class)).produce(manager.createCreationalContext(null));
+      assertEquals(qux.defaultMethod(), "default");
+   }
 
     private static class EjbDescriptorImpl<T> implements EjbDescriptor<T>, SubclassedComponentDescriptor<T> {
 

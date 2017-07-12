@@ -301,7 +301,7 @@ public class InterceptedSubclassFactory<T> extends ProxyFactory<T> {
 
         // this is a self invocation optimisation
         // test to see if this is a self invocation, and if so invokespecial the
-        // superclass method directly
+        // superclass method directly or fallback to invokeinterface in case of default methods
         if (addProceed) {
             b.dup();
 
@@ -317,7 +317,11 @@ public class InterceptedSubclassFactory<T> extends ProxyFactory<T> {
             b.aload(0);
             // create the method invocation
             b.loadMethodParameters();
-            b.invokespecial(methodInfo.getDeclaringClass(), methodInfo.getName(), methodInfo.getDescriptor());
+            if(Reflections.isDefault(methodInfo.getMethod())) {
+               b.invokeinterface(methodInfo.getDeclaringClass(), methodInfo.getName(), methodInfo.getDescriptor());
+            } else {
+               b.invokespecial(methodInfo.getDeclaringClass(), methodInfo.getName(), methodInfo.getDescriptor());
+            }
             b.returnInstruction();
             b.branchEnd(invokeSuperDirectly);
         } else {
