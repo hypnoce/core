@@ -72,6 +72,8 @@ public class SubclassedComponentDescriptorTest {
                 BarDecorator.class,
                 BarInterceptor.class,
                 BarInterceptorBinding.class,
+                QuxInterceptor.class,
+                QuxInterceptorBinding.class,
                 Baz.class
             ) {
             @Override
@@ -141,7 +143,7 @@ public class SubclassedComponentDescriptorTest {
    @Test
    public void testDefaultMethod() {
       Qux qux = manager.createInjectionTarget(manager.createAnnotatedType(Qux.class)).produce(manager.createCreationalContext(null));
-      assertEquals(qux.defaultMethod(), "default");
+      assertEquals(qux.defaultMethod(), "intercepted");
    }
 
     private static class EjbDescriptorImpl<T> implements EjbDescriptor<T>, SubclassedComponentDescriptor<T> {
